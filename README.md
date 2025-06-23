@@ -1,86 +1,94 @@
-# Relational Modeling and Database Design for Bioinformatics Data
+# 🧬 Relational Modeling and Database Design for Bioinformatics Data
 
-A capstone-level database project focused on designing and implementing a normalized relational schema to integrate UniProt, HGNC, and Disease Ontology datasets. This project demonstrates a full pipeline from data normalization (1NF to 3NF) to MySQL schema development, SQL scripting, FK/PK validation, view creation, and production-level backups.
+A capstone-level database project focused on designing and implementing a normalized relational schema for integrating **UniProt**, **HGNC**, and **Disease Ontology (DO)** datasets. This project delivers a complete workflow—from raw data analysis and 1NF–3NF normalization to SQL schema development, referential integrity validation, and staging-to-production deployment using MySQL.
 
 ---
 
 ## 📘 Overview
-This project models and stores protein, gene, and disease data using industry-standard database practices. It simulates real-world bioinformatics data management through:
 
-- Conceptual data modeling
-- Normalization (1NF → 3NF)
-- Logical and physical schema design
-- Staging and production workflows
-- SQL view creation
-- Foreign key and primary key validation
-- Backup and restore validation
+This project simulates a real-world bioinformatics database pipeline, modeling and storing protein, gene, and disease information through:
+
+- Conceptual and physical ER modeling  
+- Multi-phase normalization (1NF → 3NF)  
+- Schema design for development, staging, and production  
+- SQL-based DDL and DML operations  
+- View generation for integrated disease queries  
+- Data validation and transformation workflows  
+- Full database backup and recovery procedures
 
 ---
 
 ## 🗂️ Folder Structure
-```
-/docs              # Reports, designs, feedback summaries
-/models            # .mwb files and exported ER diagrams
-/sql               # SQL scripts: DDL, DML, views, validation
-/backup            # Full database backups
-/view_output       # Query/view result samples
+
+```bash
+/docs              # Final report, design documents, feedback
+/models            # MySQL Workbench (.mwb files) & ERD diagrams (PDF)
+/sql               # SQL scripts: DDL, DML, views, validations
+/backup            # mysqldump-based SQL backups (dev/staging/prod)
+/view_output       # View query outputs (CSV/screenshots)
 README.md          # Project documentation
 ```
 
 ---
 
 ## 🛠️ Technologies Used
-- MySQL 8.x
-- MySQL Workbench (.mwb modeling)
-- SQL (DDL, DML, views, constraints)
-- ER modeling
-- Windows 10 + MySQL Local Server
+
+- **MySQL 8.x**  
+- **MySQL Workbench**  
+- **SQL (DDL, DML, Views, Constraints)**  
+- **Relational Theory & Normalization**  
+- **Bioinformatics Curation (UniProt, HGNC, DOID)**
 
 ---
 
-## 🔄 Key Tasks
-- **Data Normalization:** Identified and resolved atomicity violations, multivalued columns, and redundancy.
-- **Entity Design:** Developed 3NF-compliant schema with audit fields.
-- **ERD Modeling:** Created conceptual and physical diagrams using Workbench.
-- **Scripted Schema Creation:** Forward-engineered development, staging, and production environments.
-- **View Creation:** Consolidated protein-gene-disease info into a clean SQL view.
-- **Validation Queries:** Checked FK/PK integrity across schemas.
-- **Data Migration:** Inserted and filtered staging data into normalized production tables.
-- **Backup & Restore:** Exported and tested full SQL dumps with schema and data.
+## 🔄 Key Tasks Completed
+
+- 🧩 **Data Normalization**: Identified multivalued and derived attributes; normalized to 3NF.  
+- 🧬 **Schema Design**: Created ERDs and functional dependency maps; applied composite and surrogate keys.  
+- 🏗️ **ERD Modeling**: Built conceptual and physical diagrams using Workbench.  
+- 🧾 **Scripted Development**: Wrote SQL for schema creation, data validation, and inserts.  
+- 🔍 **View Creation**: Built `t18_vw_p2p` to combine protein, gene, and disease info.  
+- 🔐 **PK/FK Integrity Validation**: Used `LEFT JOIN + IS NULL` to ensure referential accuracy.  
+- 🔄 **Migration Pipelines**: Loaded from staging into production while filtering invalid data.  
+- 🛡️ **Backup/Restore**: Performed complete `.sql` exports and tested database recovery.
 
 ---
 
-## ✅ Final Tables Summary (3NF)
-- **Protein** – uniprotkb_entry (PK), hgnc_id (FK), alt_names, mass, seq_len
-- **Gene** – hgnc_id (PK), approved_symbol, approved_name, chromosomal_location
-- **Disease** – uniprot_disease_name (PK), uniprotkb_entry (FK)
-- **DO Disease** – doid (PK), name, definition, relationship
-- **UniProt Disease** – uniprot_disease_name (PK), phenotype_mim_number
-- **UniProt DO Disease** – Composite PK: uniprot_disease_name + doid + uniprotkb_entry
-- **Search Activity** – Composite PK: item_number + data_collected_by + disease_search_term
-- **External Site** – site_id (PK), site_name, url
-- **DB Statistics** – id (PK), description, value
+## ✅ Final 3NF Table Summary
+
+| Table                 | Primary Key(s)                                  | Foreign Key(s)                                         |
+|----------------------|--------------------------------------------------|--------------------------------------------------------|
+| **Protein**           | uniprotkb_entry                                  | hgnc_id → Gene                                         |
+| **Gene**              | hgnc_id                                          | —                                                      |
+| **Disease**           | uniprot_disease_name                             | uniprotkb_entry → Protein                              |
+| **UniProt Disease**   | uniprot_disease_name                             | —                                                      |
+| **DO Disease**        | doid                                             | —                                                      |
+| **UniProt DO Disease**| uniprot_disease_name + doid + uniprotkb_entry   | doid → DO_Disease, uniprot_disease_name → Disease      |
+| **Search Activity**   | item_number + data_collected_by + disease_search_term | uniprotkb_entry → Protein                        |
+| **External Site**     | site_id                                          | —                                                      |
+| **DB Statistics**     | id                                               | —                                                      |
 
 ---
-
 
 ## 💡 Skills Demonstrated
-- Relational DB design (ERD, normalization)
-- SQL scripting (DDL, DML, views, joins)
-- Bioinformatics domain modeling
-- Data validation and transformation
-- Backup strategy and integrity assurance
+
+- Advanced relational database design (ER modeling, normalization)  
+- SQL scripting for DDL, DML, data validation, and transformation  
+- Schema engineering for production-scale data systems  
+- Hands-on data curation using real-world bioinformatics ontologies  
+- View optimization and referential integrity enforcement  
+- Backup/restore automation for deployment-ready environments
 
 ---
 
 ## 🔗 License
-MIT License 
+
+This project is released under the [MIT License](https://opensource.org/licenses/MIT).
 
 ---
 
 ## 👨‍💻 Author
 
-**Uday Kiran Gogineni** – Clustering & Modeling Lead  
+**Uday Kiran Gogineni**  
 _M.S. in Bioinformatics_  
-[LinkedIn](https://www.linkedin.com/in/udaykiran01)
-  
+[LinkedIn Profile](https://www.linkedin.com/in/udaykiran01)
